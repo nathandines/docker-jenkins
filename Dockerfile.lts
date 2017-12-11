@@ -6,3 +6,11 @@ USER root
 
 RUN curl -fsSL get.docker.com | sh \
   && apt-get clean
+
+RUN apt-get update \
+  && apt-get install -y golang \
+  && GOPATH=/root/go go get -u github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cli/docker-credential-ecr-login \
+  && mv /root/go/bin/docker-credential-ecr-login /usr/local/bin/ \
+  && rm -rf /root/go \
+  && apt-get purge -y golang \
+  && apt-get autoremove -y
