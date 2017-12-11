@@ -3,6 +3,10 @@ FROM jenkins/jenkins:latest
 # Change user to root, as docker-in-docker won't work as the jenkins user (even
 # with group addition), at least on Mac
 USER root
+# Add symlinks for Docker auth files to Jenkins home. Docker looks in the
+# current users' context
+RUN ln -s "${JENKINS_HOME}/.dockercfg" "/root/.dockercfg" \
+ && ln -s "${JENKINS_HOME}/.docker" "/root/.docker"
 
 RUN curl -fsSL get.docker.com | sh \
   && apt-get clean
